@@ -15,6 +15,9 @@ MatriQ project explores faster matrix multiplication algorithms with quantum com
 ## Key idea
 Optimal matrix multiplication algorithms are sequences of suitable tensor configurations. Quantum computing can deal with tensors. Let's combine these two!
 
+## Key contribution
+MatriQ algorithm is able to rediscover Strassen's algorithm.
+
 ## Resources
   - Video presentation of the project:
   - A longer and detailed scientific document with an introduction to how computationally harvest matrix multiplication algorithms
