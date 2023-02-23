@@ -23,5 +23,10 @@ MatriQ algorithm is able to rediscover [Strassen's algorithm](https://en.wikiped
   - A longer and detailed scientific document with an introduction to how computationally harvest matrix multiplication algorithms
   - Implementation (working on):
     - QUBO formulation for Amazon Braket and D-wave Leap
+        - Studies on different sized matrices are located in jupyter notebooks 2x2, 3x3, 4x4
+        - utils.py implements useful functions
+        - qubos.py implements functions to construct QUBOs
     - QAOA formulation with Pennylane
+        - TODO
     - Nvidia GPU-accelerated implementation
+        - TODO
