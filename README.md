@@ -19,8 +19,8 @@ Optimal matrix multiplication algorithms are sequences of suitable tensor config
 MatriQ algorithm is able to rediscover [Strassen's algorithm](https://en.wikipedia.org/wiki/Strassen_algorithm).
 
 ## Resources
-  - Video presentation of the project:
-  - A longer and detailed scientific document with an introduction to how computationally harvest matrix multiplication algorithms
+  - Video presentation of the project: Will appear by the end of the hackathon
+  - A longer and detailed scientific document to how computationally explore matrix multiplication algorithms (working on)
   - Implementation (working on):
     - QUBO formulation for Amazon Braket and D-wave Leap
         - Studies on different sized matrices are located in jupyter notebooks 2x2, 3x3, 4x4
