@@ -1,6 +1,7 @@
 # MatriQ project
 
 Valter Uotila\
+team: Qumpula Quantum\
 PhD student\
 University of Helsinki\
 [valteruo.github.io](valteruo.github.io)
@@ -20,7 +21,7 @@ MatriQ algorithm is able to rediscover [Strassen's algorithm](https://en.wikiped
 
 ## Resources
   - Video presentation of the project: Will appear by the end of the hackathon
-  - A longer and detailed scientific document to how computationally explore matrix multiplication algorithms (working on)
+  - [A longer and detailed scientific document to how computationally explore matrix multiplication algorithms](https://github.com/valterUo/QHack23-MatriQ/blob/main/Project_MatriQ.pdf) (working on)
   - Implementation (working on):
     - QUBO formulation for Amazon Braket and D-wave Leap
         - Studies on different sized matrices are located in jupyter notebooks 2x2, 3x3, 4x4
