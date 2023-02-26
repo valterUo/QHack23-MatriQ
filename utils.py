@@ -151,7 +151,7 @@ def solve_bqm_in_leap(bqm, sampler = "Kerberos"):
         sampleset = sampler.sample(bqm)
     elif sampler == "Simulated":
         sampler = neal.SimulatedAnnealingSampler()
-        sampleset = sampler.sample(bqm, beta_range=[-1, 1], num_reads=10000)
+        sampleset = sampler.sample(bqm, num_reads=10000)
     elif sampler == "Greedy":
         sampler = greedy.SteepestDescentSolver()
         sampleset = sampler.sample(bqm, num_reads = 100000)
