@@ -24,7 +24,7 @@ def towards_user_defined_small(initial_tensor, target_tensor, dim):
                     cubic[cube] = -1
                 else:
                     cubic[cube] = 1
-    print(cubic)
+                    
     bqm = dimod.make_quadratic(cubic, offset, dimod.BINARY)
     bqm.add_linear_from(linear)
     return bqm

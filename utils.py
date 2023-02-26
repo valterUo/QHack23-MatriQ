@@ -1,4 +1,5 @@
 import numpy as np
+import dimod
 from dwave.system import LeapHybridSampler
 from hybrid.reference import KerberosSampler
 import neal
@@ -118,7 +119,7 @@ def validate_sample(sample, dim):
 def process_result(sample, dim):
     x, y, z = [], [], []
     error = validate_sample(sample, dim)
-    print("Error: ", error)
+    print("Number of errors:", error)
     if error > 1000:
         return [], [], []
     for i in range(dim**2):
@@ -155,10 +156,13 @@ def solve_bqm_in_leap(bqm, sampler = "Kerberos"):
     elif sampler == "Greedy":
         sampler = greedy.SteepestDescentSolver()
         sampleset = sampler.sample(bqm, num_reads = 100000)
+    elif sampler == "Exact":
+        sampler = dimod.ExactSolver()
+        sampleset = sampler.sample(bqm)
     sample = sampleset.first.sample
     energy = sampleset.first.energy
     print("Energy: ", energy)
-    return sample, energy
+    return sample, energy, sampleset
 
 
 def vectorize(u):
