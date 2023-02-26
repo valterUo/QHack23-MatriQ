@@ -29,7 +29,7 @@ def get_qml_hamiltionian(bqm):
 
 
 # See https://pennylane.ai/qml/demos/tutorial_qaoa_intro.html
-def construct_qaoa_and_optimize(ocean_bqm, init_params, device = "default.qubit", optimizer = "GradientDescentOptimizer", steps = 100):
+def construct_qaoa_and_optimize(ocean_bqm, device = "default.qubit", optimizer = "GradientDescentOptimizer", steps = 100):
     cost, mix = get_qml_hamiltionian(ocean_bqm)
     
     print("Cost Hamiltonian:", cost)
@@ -37,7 +37,11 @@ def construct_qaoa_and_optimize(ocean_bqm, init_params, device = "default.qubit"
     
     wires = range(len(ocean_bqm.linear))
     dev = qml.device("default.qubit", wires=wires)
-    depth = 1
+    depth = len(ocean_bqm.linear)
+    
+    def qaoa_layer(gamma, alpha):
+        qaoa.cost_layer(gamma, cost)
+        qaoa.mixer_layer(alpha, mix)
 
     def qaoa_circuit(params):
         qml.broadcast(qml.Hadamard, wires, 'single')
@@ -51,14 +55,14 @@ def construct_qaoa_and_optimize(ocean_bqm, init_params, device = "default.qubit"
     if optimizer == "GradientDescentOptimizer":
         optimizer = qml.GradientDescentOptimizer()
         
-    params = np.array(init_params, requires_grad=True)
+    params = np.array([[0.5]*len(wires), [0.5]*len(wires)], requires_grad=True)
 
     for i in range(steps):
         params = optimizer.step(cost_function, params)
 
     print("Optimal parameters:", params)
     
-    return params
+    return params, qaoa_circuit, wires
 
 
 def print_probs(qaoa_circuit, wires, params):
