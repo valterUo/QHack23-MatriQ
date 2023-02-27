@@ -23,11 +23,10 @@ MatriQ algorithm is able to rediscover [Strassen's algorithm](https://en.wikiped
   - Video presentation of the project: Will appear by the end of the hackathon
   - [A longer and detailed scientific document to how computationally explore matrix multiplication algorithms](https://github.com/valterUo/QHack23-MatriQ/blob/main/Project_MatriQ.pdf) (working on)
   - Implementation (working on):
-    - QUBO formulation for Amazon Braket and D-wave Leap
+    - QUBO formulation for D-wave Leap (small cases solvable locally)
         - Studies on different sized matrices are located in jupyter notebooks 2x2, 3x3, 4x4
         - utils.py implements useful functions
-        - qubos.py implements functions to construct QUBOs
-    - QAOA formulation with Pennylane
-        - TODO
-    - Nvidia GPU-accelerated implementation
+        - qubos_optimized.py implements functions to construct QUBOs
+    - QAOA formulation with Pennylane so that executable on Amazon Braket
+    - QAOA formulation with Pennylane so that executable on Nvidia GPU-accelerated simulators
         - TODO
