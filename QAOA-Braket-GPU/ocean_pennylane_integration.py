@@ -10,7 +10,6 @@ def print_probs(qaoa_circuit, wires, params):
         qaoa_circuit([gamma, alpha])
         return qml.probs(wires=wires)
 
-
     probs = probability_circuit(params[0], params[1])
 
     plt.bar(range(2 ** len(wires)), probs)
@@ -80,6 +79,8 @@ def construct_qaoa_and_optimize(ocean_bqm, device = "default.qubit", optimizer =
         optimizer = qml.AdagradOptimizer()
         
     params = np.array([[0.5]*len(wires), [0.5]*len(wires)], requires_grad=True)
+    
+    print(cost_function(params))
     
     if optimizer == "QNSPSA":
         for i in range(steps):

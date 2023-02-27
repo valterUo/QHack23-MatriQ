@@ -9,7 +9,6 @@ from utils import *
 
 def towards_user_defined_small(initial_tensor, target_tensor, dim):
     cubic = dict()
-    linear = dict()
     offset = 0.0
     
     indices = []
@@ -26,10 +25,26 @@ def towards_user_defined_small(initial_tensor, target_tensor, dim):
                     cubic[cube] = 1
                     
     bqm = dimod.make_quadratic(cubic, offset, dimod.BINARY)
-    bqm.add_linear_from(linear)
     return bqm
 
 
-def towards_user_defined_full(initial_tensor, dim, guess):
+def towards_user_defined_full(initial_tensor, dim, suggested_optimal):
+    cubic = dict()
+    linear = dict()
+    offset = 0.0
     
-    return None
+    for i in range(suggested_optimal):
+        for x in range(dim**2):
+            for y in range(dim**2):
+                for z in range(dim**2):
+                    coeff = 1
+                    cube = (str(i) + "x" + str(x), str(i) + "y" + str(y), str(i) + "z" + str(z))
+                    # Penalize cases when there is difference
+                    if initial_tensor[x][y][z] != 0 and i == 0:
+                        offset += 1
+                        cubic[cube] = -1
+                    else:
+                        cubic[cube] = 1
+    
+    bqm = dimod.make_quadratic(cubic, offset, dimod.BINARY)
+    return bqm
