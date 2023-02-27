@@ -32,8 +32,8 @@ def get_qml_hamiltionian(bqm):
 def construct_qaoa_and_optimize(ocean_bqm, device = "default.qubit", optimizer = "GradientDescentOptimizer", steps = 100):
     cost, mix = get_qml_hamiltionian(ocean_bqm)
     
-    print("Cost Hamiltonian:", cost)
-    print("Mixer Hamiltonian:", mix)
+    #print("Cost Hamiltonian:", cost)
+    #print("Mixer Hamiltonian:", mix)
     
     wires = range(len(ocean_bqm.linear))
     dev = qml.device("default.qubit", wires=wires)
@@ -54,11 +54,22 @@ def construct_qaoa_and_optimize(ocean_bqm, device = "default.qubit", optimizer =
     
     if optimizer == "GradientDescentOptimizer":
         optimizer = qml.GradientDescentOptimizer()
+    elif optimizer == "SPSA":
+        optimizer = qml.SPSAOptimizer(maxiter=steps)
+    elif optimizer == "QNSPSA":
+        optimizer = qml.QNSPSAOptimizer()
         
     params = np.array([[0.5]*len(wires), [0.5]*len(wires)], requires_grad=True)
-
-    for i in range(steps):
-        params = optimizer.step(cost_function, params)
+    
+    if optimizer == "QNSPSA":
+        for i in range(steps):
+            params, energy = optimizer.step_and_cost(cost_function, params)
+            print("Step:", i, "Params: ", params, "Energy: ", energy)
+    else:
+        for i in range(steps):
+            print("Step:", i)
+            params = optimizer.step(cost_function, params)
+            print("Params: ", params)
 
     print("Optimal parameters:", params)
     
