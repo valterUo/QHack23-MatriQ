@@ -4,6 +4,19 @@ from pennylane import qaoa
 from pennylane import numpy as np
 
 
+def print_probs(qaoa_circuit, wires, params):
+    @qml.qnode(dev)
+    def probability_circuit(gamma, alpha):
+        qaoa_circuit([gamma, alpha])
+        return qml.probs(wires=wires)
+
+
+    probs = probability_circuit(params[0], params[1])
+
+    plt.bar(range(2 ** len(wires)), probs)
+    plt.show()
+
+
 def get_qml_hamiltionian(bqm):
     var_to_z_number = {}
     for i, var in enumerate(bqm.linear):
@@ -36,7 +49,12 @@ def construct_qaoa_and_optimize(ocean_bqm, device = "default.qubit", optimizer =
     #print("Mixer Hamiltonian:", mix)
     
     wires = range(len(ocean_bqm.linear))
-    dev = qml.device("default.qubit", wires=wires)
+    dev = None
+    if device == "Braket":
+        dev = qml.device("braket.aws.qubit", device_arn="arn:aws:braket:::device/quantum-simulator/amazon/sv1", wires=wires)
+    else:
+        dev = qml.device(device, wires=wires)
+        
     depth = len(ocean_bqm.linear)
     
     def qaoa_layer(gamma, alpha):
@@ -58,6 +76,8 @@ def construct_qaoa_and_optimize(ocean_bqm, device = "default.qubit", optimizer =
         optimizer = qml.SPSAOptimizer(maxiter=steps)
     elif optimizer == "QNSPSA":
         optimizer = qml.QNSPSAOptimizer()
+    elif optimizer == "Adagrad":
+        optimizer = qml.AdagradOptimizer()
         
     params = np.array([[0.5]*len(wires), [0.5]*len(wires)], requires_grad=True)
     
@@ -74,16 +94,3 @@ def construct_qaoa_and_optimize(ocean_bqm, device = "default.qubit", optimizer =
     print("Optimal parameters:", params)
     
     return params, qaoa_circuit, wires
-
-
-def print_probs(qaoa_circuit, wires, params):
-    @qml.qnode(dev)
-    def probability_circuit(gamma, alpha):
-        qaoa_circuit([gamma, alpha])
-        return qml.probs(wires=wires)
-
-
-    probs = probability_circuit(params[0], params[1])
-
-    plt.bar(range(2 ** len(wires)), probs)
-    plt.show()

@@ -30,5 +30,6 @@ def towards_user_defined_small(initial_tensor, target_tensor, dim):
     return bqm
 
 
-def towards_user_defined_full(initial_tensor, target_tensor, dim, guess):
+def towards_user_defined_full(initial_tensor, dim, guess):
+    
     return None
