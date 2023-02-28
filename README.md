@@ -17,16 +17,15 @@ MatriQ project explores faster matrix multiplication algorithms with quantum com
 Optimal matrix multiplication algorithms are sequences of suitable tensor configurations. Quantum computing can deal with tensors. Let's combine these two!
 
 ## Key contribution
-MatriQ algorithm is able to rediscover [Strassen's algorithm](https://en.wikipedia.org/wiki/Strassen_algorithm) with a good initial guess.
+The current MatriQ algorithm is able to discover 6/7 steps of [Strassen's algorithm](https://en.wikipedia.org/wiki/Strassen_algorithm) with a good initial guess.
 
 ## Resources
-  - Video presentation of the project: Will appear by the end of the hackathon
-  - [A longer and detailed scientific document to how computationally explore matrix multiplication algorithms](https://github.com/valterUo/QHack23-MatriQ/blob/main/Project_MatriQ.pdf) (working on)
-  - Implementation (working on):
-    - QUBO formulation for D-wave Leap (small cases solvable locally)
+  - Video presentation of the project: https://youtu.be/ux2twxZ2T4c
+  - [A detailed scientific document to how computationally explore matrix multiplication algorithms](https://github.com/valterUo/QHack23-MatriQ/blob/main/Project_MatriQ.pdf)
+  - Implementation:
+    - QUBO formulation for D-wave Leap or simulated annealing (small cases solvable locally)
         - Studies on different sized matrices are located in jupyter notebooks 2x2, 3x3, 4x4
         - utils.py implements useful functions
         - qubos_optimized.py implements functions to construct QUBOs
-    - QAOA formulation with Pennylane so that executable on Amazon Braket
-    - QAOA formulation with Pennylane so that executable on Nvidia GPU-accelerated simulators
-        - TODO
+        - drafts folder contains the very first implementations
+    - QAOA formulation with Pennylane so that executable on Amazon Braket (and on Nvidia GPUs in the future)

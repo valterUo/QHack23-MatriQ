@@ -89,7 +89,7 @@ def construct_qaoa_and_optimize(ocean_bqm, device = "default.qubit", optimizer =
     else:
         for i in range(steps):
             print("Step:", i)
-            params = optimizer.step(cost_function, params)
+            #params = optimizer.step(cost_function, params)
             print("Params: ", params)
 
     print("Optimal parameters:", params)
