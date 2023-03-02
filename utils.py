@@ -155,7 +155,7 @@ def solve_bqm_in_leap(bqm, sampler = "Kerberos"):
         sampleset = sampler.sample(bqm, num_reads=10000)
     elif sampler == "Greedy":
         sampler = greedy.SteepestDescentSolver()
-        sampleset = sampler.sample(bqm, num_reads = 100000)
+        sampleset = sampler.sample(bqm, num_reads = 1000000)
     elif sampler == "Exact":
         sampler = dimod.ExactSolver()
         sampleset = sampler.sample(bqm)
