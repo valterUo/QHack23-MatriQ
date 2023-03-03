@@ -36,13 +36,13 @@ def towards_user_defined_small(initial_tensor, target_tensor, dim):
     return bqm
 
 # (1 - x - y)^2 = x^2 + y^2 + 2xy - 2x - 2y + 1 = - x - y + 2xy + 1
-# (0 - x - y)^2 = x^2 + y^2 + 2xy = x + y + 2xy
+# (0 - x - y - z)^2 = x^2 + y^2 + z^2 + 2xy + 2xz + 2yz = x + y + z + 2xy + 2xz + 2yz
 def square_negative_sum(hubo, variables, offset):
     for var in variables:
         v = tuple(sorted(list((flatten(var)))))
         if offset == 1:
             if v in hubo:
-                hubo[v] = hubo[v] - 1
+                hubo[v] = hubo[v]-1
             else:
                 hubo[v] = -1
         else:
@@ -65,25 +65,14 @@ def square_negative_sum(hubo, variables, offset):
 def towards_user_defined_full(initial_tensor, dim, suggested_optimal):
     hubo = dict()
     offset = 0
+    weight = 1
     for x in range(dim**2):
         for y in range(dim**2):
             for z in range(dim**2):
                 variables = [(str(i) + "x" + str(x), str(i) + "y" + str(y), str(i) + "z" + str(z)) for i in range(suggested_optimal)]
                 offset += int(initial_tensor[x][y][z])
                 hubo = square_negative_sum(hubo, variables, int(initial_tensor[x][y][z]))
-    #bqm = dimod.make_quadratic(hubo, 1000, dimod.BINARY)
-    hqm = dimod.BinaryPolynomial(hubo, dimod.BINARY)
-    reduced, mapping = dimod.reduce_binary_polynomial(hqm)
-    bqm = dimod.BinaryQuadraticModel(dict(), dict(), offset, dimod.BINARY)
-    for quad in reduced:
-        u, v = quad[0]
-        bqm.add_quadratic(u, v, quad[1])
-    #reduced, quadratic = dimod.reduce_binary_polynomial(dimod.BinaryPolynomial(hubo, dimod.BINARY))
-    #print(linear)
-    #for t in reduced:
-    #    print(t)
-        #if len(t[0]) == 1:
-        #    print(t)
-    #print(len(quadratic))
-    #bqm = dimod.BinaryQuadraticModel(reduced, offset, dimod.BINARY)
-    return bqm
+    bqm = dimod.make_quadratic(hubo, weight, dimod.BINARY)
+    bqm.offset = offset
+    poly = dimod.BinaryPolynomial(hubo, dimod.BINARY)
+    return bqm, poly
