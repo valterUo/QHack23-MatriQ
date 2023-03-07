@@ -146,7 +146,7 @@ def solve_bqm_in_leap(bqm, sampler = "Kerberos"):
     #bqm.normalize()
     if sampler == "Kerberos":
         sampler = KerberosSampler()
-        sampleset = sampler.sample(bqm, max_iter=1000, convergence=3, qpu_params={'label': 'Matrix multiplication'})
+        sampleset = sampler.sample(bqm, max_iter=7000, convergence=9, qpu_params={'label': 'Matrix multiplication'}, sa_reads=100000, sa_sweeps=1000000, qpu_reads=1)
     elif sampler == "LeapHybrid":
         sampler = LeapHybridSampler()
         sampleset = sampler.sample(bqm)
