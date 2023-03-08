@@ -43,17 +43,22 @@ def towards_user_defined_small(initial_tensor, target_tensor, dim):
 # (3t - x - y - z)^2 = 9t^2 - 9tx - 9ty - 9tz + x^2 + 2xy + 2xz + y^2 + 2yz + z^2 = 9t - 6tx - 6ty - 6tz + x + 2xy + 2xz + y + 2yz + z
 # (4t - x - y - z)^2 = 16t^2 - 8tx - 8ty - 8tz + x^2 + 2xy + 2xz + y^2 + 2yz + z^2 = 16t - 8tx - 8ty - 8tz + x + 2xy + 2xz + y + 2yz + z
 def square_negative_sum(hubo, variables, offset, aux_id):
+    #print(hubo)
     for var in variables:
         v = tuple(sorted(list((flatten(var)))))
         if offset > 0:
             if v in hubo:
+                #print("1")
                 hubo[v] = hubo[v] - 1
             else:
+                #print("2")
                 hubo[v] = -1
         else:
             if v in hubo:
+                #print("3")
                 hubo[v] = hubo[v] + 1
             else:
+                #print("4")
                 hubo[v] = 1
                 
     if offset > 0:
@@ -61,29 +66,38 @@ def square_negative_sum(hubo, variables, offset, aux_id):
         for pair in combs:
             v = tuple(sorted(list(flatten(pair))))
             if v in hubo:
+                #print("5")
                 hubo[v] = hubo[v] + 2
             else:
+                #print("6")
                 hubo[v] = 2
     else:
-        aux =  tuple("a" + str(aux_id))
+        aux =  ("a" + str(aux_id),)
         if aux in hubo:
+            #print("7")
             hubo[aux] = hubo[aux] + 4
         else:
+            #print("8")
             hubo[aux] = 4
         variables.append(aux)
+        #print(variables)
         aux_id = aux_id + 1
         combs = combinations(variables, 2)
         for pair in combs:
             v = tuple(sorted(list(flatten(pair))))
-            if aux in v:
+            if aux[0] in v:
                 if v in hubo:
+                    #print("9")
                     hubo[v] = hubo[v] - 4
                 else:
+                    #print("10")
                     hubo[v] = -4
             else:
                 if v in hubo:
+                    #print("11")
                     hubo[v] = hubo[v] + 2
                 else:
+                    #print("12")
                     hubo[v] = 2
         
     #print(hubo)   
@@ -153,7 +167,8 @@ def towards_user_defined_full(initial_tensor, dim, suggested_optimal, weight):
                             if all([test_tensor[t] for t in term]):
                                 print(term, test_hubo[term])
     
+    #print(hubo)
     bqm = dimod.make_quadratic(hubo, weight, dimod.BINARY)
     bqm.offset = offset
     #poly = dimod.BinaryPolynomial(hubo, dimod.BINARY)
-    return bqm #, poly
+    return bqm, hubo #, poly

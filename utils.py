@@ -2,8 +2,7 @@ import numpy as np
 import dimod
 from dwave.system import LeapHybridSampler
 from hybrid.reference import KerberosSampler
-import neal
-import greedy
+from dwave.samplers import TabuSampler, SteepestDescentSolver, SimulatedAnnealingSampler, TreeDecompositionSolver
 
 
 def append_linear_safe(variable, value, linear_dict):
@@ -151,13 +150,19 @@ def solve_bqm_in_leap(bqm, sampler = "Kerberos"):
         sampler = LeapHybridSampler()
         sampleset = sampler.sample(bqm)
     elif sampler == "Simulated":
-        sampler = neal.SimulatedAnnealingSampler()
-        sampleset = sampler.sample(bqm, num_reads=10000)
+        sampler = SimulatedAnnealingSampler()
+        sampleset = sampler.sample(bqm, beta_range=[.1, 4.2], beta_schedule_type='linear')
     elif sampler == "Greedy":
-        sampler = greedy.SteepestDescentSolver()
-        sampleset = sampler.sample(bqm, num_reads = 1000000)
+        sampler = SteepestDescentSolver()
+        sampleset = sampler.sample(bqm)
     elif sampler == "Exact":
         sampler = dimod.ExactSolver()
+        sampleset = sampler.sample(bqm)
+    elif sampler == "Tabu":
+        sampler = TabuSampler()
+        sampleset = sampler.sample(bqm)
+    elif sampler == "Tree":
+        sampler = TreeDecompositionSolver()
         sampleset = sampler.sample(bqm)
     sample = sampleset.first.sample
     energy = sampleset.first.energy
