@@ -46,14 +46,14 @@ def square_negative_sum(hubo, variables, offset, aux_id):
     #print(hubo)
     for var in variables:
         v = tuple(sorted(list((flatten(var)))))
-        if offset > 0:
+        if offset == 1:
             if v in hubo:
                 #print("1")
                 hubo[v] = hubo[v] - 1
             else:
                 #print("2")
                 hubo[v] = -1
-        else:
+        elif offset == 0:
             if v in hubo:
                 #print("3")
                 hubo[v] = hubo[v] + 1
@@ -61,7 +61,7 @@ def square_negative_sum(hubo, variables, offset, aux_id):
                 #print("4")
                 hubo[v] = 1
                 
-    if offset > 0:
+    if offset == 1:
         combs = combinations(variables, 2)
         for pair in combs:
             v = tuple(sorted(list(flatten(pair))))
@@ -71,7 +71,7 @@ def square_negative_sum(hubo, variables, offset, aux_id):
             else:
                 #print("6")
                 hubo[v] = 2
-    else:
+    elif offset == 0:
         aux =  ("a" + str(aux_id),)
         if aux in hubo:
             #print("7")
@@ -103,7 +103,7 @@ def square_negative_sum(hubo, variables, offset, aux_id):
     #print(hubo)   
     return hubo, aux_id
 
-def variable_to_strassen(v):
+def variable_to_strassen(v, aux_ids = []):
     strassen_tensors = [[[0,0,0,1], [-1,0,1,0], [1,0,1,0]],
                         [[1,1,0,0], [0,0,0,1], [-1,1,0,0]],
                         [[-1,0,1,0], [1,1,0,0], [0,0,0,1]],
@@ -132,7 +132,7 @@ def variable_to_strassen(v):
     
     
 
-def get_test_strassen_test_tensor(bqm):
+def get_test_strassen_test_tensor(bqm, aux_ids = []):
     variables = dict()
     for v in bqm.variables:
         variables[v] = variable_to_strassen(v)
@@ -142,13 +142,15 @@ def get_test_strassen_test_tensor(bqm):
             #print(v)
             v2 = v.split("*")
             v2 = tuple(filter(lambda e: "a" in e, v2))
-            variables[v] = variable_to_strassen(v2)
+            v2 = v2[0]
+            variables[v] = int(v2 in aux_ids)
 
     return variables
 
 def towards_user_defined_full(initial_tensor, dim, suggested_optimal, weight):
     hubo = dict()
     offset, aux_id = 0, 0
+    aux_ids = []
     for x in range(dim**2):
         for y in range(dim**2):
             for z in range(dim**2):
@@ -156,19 +158,25 @@ def towards_user_defined_full(initial_tensor, dim, suggested_optimal, weight):
                 offset += int(initial_tensor[x][y][z])
                 hubo, aux_id = square_negative_sum(hubo, variables, int(initial_tensor[x][y][z]), aux_id)
                 
-                if False:
-                    test_hubo, aux_id2 = square_negative_sum(dict(), variables, int(initial_tensor[x][y][z]), 0)
+                if suggested_optimal == 7: # For bugging purposes
+                    variables2 = [(str(i) + "x" + str(x), str(i) + "y" + str(y), str(i) + "z" + str(z)) for i in range(suggested_optimal)]
+                    test_hubo, aux_id2 = square_negative_sum(dict(), variables2, int(initial_tensor[x][y][z]), 0)
                     test_bqm = dimod.make_quadratic(test_hubo, weight, dimod.BINARY)
                     test_tensor = get_test_strassen_test_tensor(test_bqm)
                     energy = test_bqm.energy(test_tensor) + int(initial_tensor[x][y][z])
                     if energy != 0:
-                        print("Energy: ", energy)
-                        for term in test_hubo:
-                            if all([test_tensor[t] for t in term]):
-                                print(term, test_hubo[term])
+                        aux_ids.append("a" + str(aux_id - 1))
+                        test_tensor = get_test_strassen_test_tensor(test_bqm, ["a" + str(0)])
+                        energy = test_bqm.energy(test_tensor) + int(initial_tensor[x][y][z])
+                        if False: # For bugging purposes
+                            print("Energy: ", energy)
+                            for term in test_hubo:
+                                if all([test_tensor[t] for t in term]):
+                                    print(term, test_hubo[term])
     
     #print(hubo)
     bqm = dimod.make_quadratic(hubo, weight, dimod.BINARY)
     bqm.offset = offset
+    #print(bqm.offset)
     #poly = dimod.BinaryPolynomial(hubo, dimod.BINARY)
-    return bqm, hubo #, poly
+    return bqm, hubo, aux_ids #, poly

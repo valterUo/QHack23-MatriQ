@@ -145,7 +145,7 @@ def solve_bqm_in_leap(bqm, sampler = "Kerberos"):
     #bqm.normalize()
     if sampler == "Kerberos":
         sampler = KerberosSampler()
-        sampleset = sampler.sample(bqm, max_iter=7000, convergence=9, qpu_params={'label': 'Matrix multiplication'}, sa_reads=100000, sa_sweeps=1000000, qpu_reads=1)
+        sampleset = sampler.sample(bqm, max_iter=10000, convergence=10, qpu_params={'label': 'Matrix multiplication'}, sa_reads=100000, sa_sweeps=1000000, qpu_reads=1000)
     elif sampler == "LeapHybrid":
         sampler = LeapHybridSampler()
         sampleset = sampler.sample(bqm)
@@ -160,7 +160,7 @@ def solve_bqm_in_leap(bqm, sampler = "Kerberos"):
         sampleset = sampler.sample(bqm)
     elif sampler == "Tabu":
         sampler = TabuSampler()
-        sampleset = sampler.sample(bqm)
+        sampleset = sampler.sample(bqm, num_reads = 100)
     elif sampler == "Tree":
         sampler = TreeDecompositionSolver()
         sampleset = sampler.sample(bqm)
