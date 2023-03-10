@@ -99,7 +99,7 @@ def square_negative_sum(hubo, variables, offset, aux_id):
                 else:
                     #print("12")
                     hubo[v] = 2
-        
+    
     #print(hubo)   
     return hubo, aux_id
 
