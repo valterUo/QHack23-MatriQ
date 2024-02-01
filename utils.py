@@ -154,16 +154,16 @@ def solve_bqm_in_leap(bqm, sampler = "Kerberos"):
         sampleset = sampler.sample(bqm, beta_range=[.1, 4.2], beta_schedule_type='linear')
     elif sampler == "Greedy":
         sampler = SteepestDescentSolver()
-        sampleset = sampler.sample(bqm)
+        sampleset = sampler.sample(bqm, num_reads = 100000)
     elif sampler == "Exact":
         sampler = dimod.ExactSolver()
         sampleset = sampler.sample(bqm)
     elif sampler == "Tabu":
         sampler = TabuSampler()
-        sampleset = sampler.sample(bqm, num_reads = 100)
+        sampleset = sampler.sample(bqm, num_reads = 10000)
     elif sampler == "Tree":
         sampler = TreeDecompositionSolver()
-        sampleset = sampler.sample(bqm)
+        sampleset = sampler.sample(bqm, num_reads = 10000)
     sample = sampleset.first.sample
     energy = sampleset.first.energy
     print("Energy: ", energy)
