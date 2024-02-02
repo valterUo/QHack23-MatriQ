@@ -4,8 +4,14 @@ import sympy as sym
 from sympy import Array, tensorproduct
 from utils.tensor_utils import get_standard_tensor
 
+"""
+This script is used to construct the HUBO (Higher Order Unconstrained Binary Optimization) problem for the given tensor decomposition optimization problem.
+It uses the holistic approach: it aims to minimize the full decomposition instead of a single step (compared to the modular approach).
+Later this HUBO problem can be converted into QUBO problem and solved using D-Wave quantum annealer or other classical solvers.
+Run this file to produce the hubo.pkl file which can be imported to the solvers.
+"""
 
-def process_element(tensor_elem, constant_elem):
+def calculate_local_hubo(tensor_elem, constant_elem):
     expression = sym.Pow(int(constant_elem) - tensor_elem, 2)
     expression = sym.expand(expression)
     
@@ -43,7 +49,7 @@ def substitute_variables(vars):
 
 if __name__ == '__main__':
     
-    hubo_file_name = "hubo.pkl"
+    hubo_file_name = "files//hubo.pkl"
     suggested_optimal = 7
     dim = 2
     xs, ys, zs = [], [], []
@@ -74,7 +80,7 @@ if __name__ == '__main__':
                 for k in range(dim**2):
                     tensor_elem = t[i][j][k]
                     constant_elem = initial_tensor[i][j][k]
-                    futures.append(executor.submit(process_element, tensor_elem, constant_elem))
+                    futures.append(executor.submit(calculate_local_hubo, tensor_elem, constant_elem))
 
         # Process the results as they complete
         for future in concurrent.futures.as_completed(futures):

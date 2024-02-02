@@ -22,10 +22,3 @@ The current MatriQ algorithm is able to discover 6/7 steps of [Strassen's algori
 ## Resources
   - Video presentation of the project: https://youtu.be/ux2twxZ2T4c
   - [A detailed scientific document to how computationally explore matrix multiplication algorithms](https://github.com/valterUo/QHack23-MatriQ/blob/main/Project_MatriQ.pdf)
-  - Implementation:
-    - QUBO formulation for D-wave Leap or simulated annealing (small cases solvable locally)
-        - Studies on different sized matrices are located in jupyter notebooks 2x2, 3x3, 4x4
-        - utils.py implements useful functions
-        - qubos_optimized.py implements functions to construct QUBOs
-        - drafts folder contains the very first implementations
-    - QAOA formulation with Pennylane so that executable on Amazon Braket (and on Nvidia GPUs in the future)

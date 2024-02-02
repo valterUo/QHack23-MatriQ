@@ -1,6 +1,5 @@
 import time
 import cplex
-import numpy as np
 import dimod
 from dwave.system import LeapHybridSampler
 from hybrid.reference import KerberosSampler
@@ -85,7 +84,7 @@ class Algorithm:
         quadratic_coeffs = self.bqm.quadratic
         obj_list = [(str(name[0]), str(name[1]), coeff) for name, coeff in quadratic_coeffs.items()]
         cplex_problem.objective.set_quadratic_coefficients(obj_list)
-        lp_file = "linear_program_files//" + str(identifier) + ".lp"
+        lp_file = "files//" + str(identifier) + ".lp"
         cplex_problem.write(lp_file)
         return cplex_problem
     
