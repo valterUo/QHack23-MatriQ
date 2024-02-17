@@ -12,7 +12,13 @@ files/factorizations_f2.npz
 test.ipynb
 test.py
 
-*.pkl
+files/hubo_222.pkl
+files/hubo_223.pkl
+files/hubo_224.pkl
+files/hubo_225.pkl
+files/hubo_233.pkl
+files/strasse_problem.pkl
+files/strasse_results.pkl
 
 /drafts/
 
