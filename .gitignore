@@ -3,6 +3,17 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+files/factorizations_r.npz
+files/factorizations_f2.npz
+
+*.txt
+*.lp
+
+test.ipynb
+test.py
+
+*.pkl
+
 /drafts/
 
 # C extensions
